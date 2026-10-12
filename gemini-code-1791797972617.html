@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ارائه کارآفرینی اجتماعی - غزل قدسی</title>
+    
+    <!-- فونت وزیرمتن و لاله‌زار -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lalezar&display=swap" rel="stylesheet">
+    
+    <!-- آیکون‌های ریمیکس (متفاوت از ارائه قبلی) -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --burgundy: #881337;
+            --burgundy-dark: #4c0519;
+            --burgundy-light: #ffe4e6;
+            --gold: #d97706;
+            --gold-light: #fef3c7;
+            --bg-cream: #faf6f0;
+            --card-white: #ffffff;
+            --text-main: #1c1917;
+            --text-muted: #57534e;
+            --border-warm: #e7e5e4;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100dvh;
+            font-family: 'Vazirmatn', Tahoma, sans-serif;
+            background-color: #e5e0d8;
+            color: var(--text-main);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* قاب عمودی موبایل (در گوشی تمام‌صفحه و در کامپیوتر شبیه موبایل) */
+        .mobile-viewport {
+            width: 100%;
+            max-width: 440px;
+            height: 100dvh;
+            background-color: var(--bg-cream);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.18);
+        }
+
+        /* نوار پیشرفت بالای صفحه */
+        .top-bar {
+            padding: 14px 20px 10px;
+            background: var(--card-white);
+            border-bottom: 1px solid var(--border-warm);
+            z-index: 20;
+        }
+
+        .top-bar-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 5px;
+            background-color: var(--border-warm);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--burgundy), var(--gold));
+            width: 8.33%;
+            transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 10px;
+        }
+
+        /* بخش اسلایدها */
+        .slides-wrapper {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            padding: 16px 18px 90px 18px;
+            overflow-y: auto;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-30px) scale(0.98);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            scrollbar-width: none;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0) scale(1);
+            z-index: 5;
+        }
+
+        /* کارت اصلی هر اسلاید */
+        .editorial-card {
+            background: var(--card-white);
+            border-radius: 22px;
+            border: 1px solid var(--border-warm);
+            box-shadow: 0 10px 25px -5px rgba(136, 19, 55, 0.06);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            margin: auto 0;
+        }
+
+        /* تصویر بالای کارت */
+        .card-banner {
+            width: 100%;
+            height: 155px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--burgundy-dark), var(--burgundy));
+        }
+
+        .card-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.85;
+        }
+
+        .banner-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(28, 25, 23, 0.85), rgba(136, 19, 55, 0.2));
+            display: flex;
+            align-items: flex-end;
+            padding: 14px 18px;
+        }
+
+        .slide-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.92);
+            color: var(--burgundy);
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .card-body {
+            padding: 22px 20px;
+        }
+
+        /* هدر اسلایدهای بدون عکس */
+        .card-header-minimal {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px dashed var(--border-warm);
+        }
+
+        .icon-circle {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: var(--burgundy-light);
+            color: var(--burgundy);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        h1 {
+            font-family: 'Lalezar', 'Vazirmatn', sans-serif;
+            font-size: 1.45rem;
+            font-weight: 400;
+            line-height: 1.4;
+            color: var(--burgundy-dark);
+            margin-bottom: 8px;
+        }
+
+        h2 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--burgundy);
+            line-height: 1.4;
+        }
+
+        p {
+            font-size: 0.92rem;
+            line-height: 1.85;
+            color: var(--text-muted);
+            text-align: justify;
+            margin-bottom: 12px;
+        }
+
+        /* لیست‌های سفارشی */
+        .custom-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .custom-list li {
+            position: relative;
+            padding: 10px 14px 10px 12px;
+            background: var(--bg-cream);
+            border-radius: 12px;
+            border-right: 4px solid var(--burgundy);
+            font-size: 0.88rem;
+            line-height: 1.75;
+            color: var(--text-main);
+            text-align: justify;
+        }
+
+        .custom-list li strong {
+            color: var(--burgundy-dark);
+            font-weight: 700;
+        }
+
+        /* باکس نقل‌قول یا نکته کلیدی */
+        .quote-box {
+            background: var(--gold-light);
+            border: 1px solid #fde68a;
+            border-right: 4px solid var(--gold);
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            line-height: 1.75;
+            color: #78350f;
+            margin: 10px 0;
+            text-align: justify;
+        }
+
+        /* گرید دو ستونه برای مقایسه‌ها */
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .compare-box {
+            background: var(--bg-cream);
+            padding: 12px;
+            border-radius: 12px;
+            border-top: 3px solid var(--burgundy);
+            font-size: 0.83rem;
+            line-height: 1.65;
+        }
+
+        .compare-box.alt {
+            border-top-color: var(--gold);
+        }
+
+        .compare-box h4 {
+            color: var(--burgundy-dark);
+            margin-bottom: 4px;
+            font-size: 0.88rem;
+        }
+
+        /* استایل اختصاصی اسلاید اول (کاور) */
+        .cover-card {
+            text-align: center;
+        }
+
+        .bismillah {
+            font-size: 0.85rem;
+            color: var(--gold);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .student-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 16px;
+            text-align: right;
+        }
+
+        .student-item {
+            background: var(--bg-cream);
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border-warm);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .student-item.full {
+            grid-column: span 2;
+        }
+
+        .student-item i {
+            font-size: 1.2rem;
+            color: var(--burgundy);
+            background: var(--burgundy-light);
+            padding: 6px;
+            border-radius: 8px;
+        }
+
+        .student-item span {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            display: block;
+        }
+
+        .student-item strong {
+            font-size: 0.88rem;
+            color: var(--text-main);
+        }
+
+        /* نوار کنترل پایین صفحه (Dock) */
+        .bottom-dock {
+            position: absolute;
+            bottom: 16px;
+            left: 18px;
+            right: 18px;
+            background: rgba(28, 25, 23, 0.92);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 30;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .dock-btn {
+            background: rgba(255,255,255,0.12);
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 14px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .dock-btn:active {
+            transform: scale(0.95);
+            background: var(--burgundy);
+        }
+
+        .dock-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .slide-counter {
+            color: #fde68a;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+<div class="mobile-viewport" id="touchArea">
+
+    <!-- هدر و نوار پیشرفت -->
+    <div class="top-bar">
+        <div class="top-bar-info">
+            <span><i class="ri-Graduation-cap-line"></i> درس کارآفرینی | دانشگاه غیرانتفاعی کار</span>
+            <span>غزل قدسی</span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <!-- اسلایدها -->
+    <div class="slides-wrapper">
+
+        <!-- اسلاید ۱: جلد -->
+        <div class="slide active">
+            <div class="editorial-card cover-card">
+                <div class="card-banner">
+                    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80" alt="همکاری دانشجویان در دانشگاه">
+                    <div class="banner-overlay">
+                        <span class="slide-badge"><i class="ri-award-line"></i> پژوهش علمی - پژوهشی (SID)</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="bismillah">به نام خداوند جان و خرد</div>
+                    <h1>تحلیل وضعیت ترویج کارآفرینی اجتماعی در نظام آموزش عالی ایران</h1>
+                    <p style="text-align: center; font-size: 0.82rem; margin-bottom: 8px;">
+                        پژوهشگران مقاله: دکتر حمید رحیمیان، دکتر عباس عباسپور، دانیال داوودی راد (دانشگاه علامه طباطبایی)
+                    </p>
+
+                    <div class="student-grid">
+                        <div class="student-item full">
+                            <i class="ri-user-smile-line"></i>
+                            <div>
+                                <span>ارائه‌دهنده (دانشجو)</span>
+                                <strong>غزل قدسی</strong>
+                            </div>
+                        </div>
+                        <div class="student-item">
+                            <i class="ri-building-4-line"></i>
+                            <div>
+                                <span>دانشگاه</span>
+                                <strong>غیر انتفاعی کار</strong>
+                            </div>
+                        </div>
+                        <div class="student-item">
+                            <i class="ri-book-read-line"></i>
+                            <div>
+                                <span>عنوان درس / سال</span>
+                                <strong>کارآفرینی - ۱۴۰۵</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- اسلاید ۲: چکیده و مسئله پژوهش -->
+        <div class="slide">
+            <div class="editorial-card">
+                <div class="card-body">
+                    <div class="card-header-minimal">
+                        <div class="icon-circle"><i class="ri-focus-2-line"></i></div>
+                        <div>
+                            <span style="font-size: 0.75rem; color: var(--gold); font-weight: 700;">بخش اول</span>
+                            <h2>چکیده و مسئله اصلی پژوهش</h2>
+                        </div>
+                    </div>
+                    <p>
+                        امروزه اهمیت فعالیت <strong>کارآفرینان اجتماعی</strong> کمتر از کارآفرینان تجاری نیست؛ اما مطالعات در زمینه فرآیند شکل‌گیری و ترویج آن بسیار محدود بوده است.
+                    </p>
+                    <ul class="custom-list">
+                        <li><strong>تفاوت در ماهیت:</strong> کارآفرینان اجتماعی در انگیزه‌ها، ماموریت، شناسایی فرصت‌ها و بسیج منابع با کارآفرینان تجاری تفاوت اساسی دارند.</li>
+                        <li><strong>مسئله اساسی تحقیق:</strong> چگونگی ترویج این مفهوم در نظام آموزش عالی ایران که تاکنون مغفول مانده است.</li>
+                        <li><strong>یافته کلیدی:</strong> نتایج نشان می‌دهد در نظام آموزشی کشور توجه کافی به این بُعد نمی‌شود و آشنایی دانشجویان با آن بسیار اندک است.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- اسلاید ۳: ضرورت دانشگاه کارآفرین -->
+        <div class="slide">
+            <div class="editorial-card">
+                <div class="card-banner" style="height: 135px;">
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80" alt="دانشگاه کارآفرین و کار تیمی">
+                    <div class="banner-overlay">
+                        <span class="slide-badge"><i class="ri-Lightbulb-flash-line"></i> اکوسیستم دانشگاهی</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h2>مقدمه و ضرورت «دانشگاه کارآفرین»</h2>
+                    <p>
+                        سرمایه‌داران بزرگ اغلب فرصت شنیدن ایده‌های کوچک را ندارند؛ بنابراین دانشگاه باید به عنوان <strong>پل ارتباطی میان کارآفرینان و سرمایه‌گذاران</strong> عمل کند (راجر، ۲۰۱۲).
+                    </p>
+                    <ul class="custom-list">
+                        <li><strong>حمایت‌های سه‌گانه:</strong> ارائه حمایت‌های آموزشی، مالی و بازاریابی به دانشجویان خالق ایده.</li>
+                        <li><strong>ساختار ارتباطی:</strong> ارتباطات باز، افقی و غیررسمی برای تبادل ایده‌های خلاق و تقویت کار گروهی.</li>
+                        <li><strong>شعار دانشگاه کارآفرین:</strong> «آرمان مدون، آینده‌نگر، مشتری‌گرا و نوآور» (ذبیحی و مقدسی، ۱۳۸۵).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- اسلاید ۴: اهداف آموزش کارآفرینی -->
+        <div class="slide">
+            <div class="editorial-card">
+                <div class="card-body">
+                    <div class="card-header-minimal">
+                        <div class="icon-circle"><i class="ri-compass-3-line"></i></div>
+                        <div>
+                            <span style="font-size: 0.75rem; color: var(--gold); font-weight: 700;">بخش سوم</span>
+                            <h2>اهداف آموزش کارآفرینی</h2>
+                        </div>
+                    </div>
+                    <p>
+                        مطالعات اروپایی (اوربانو، ۲۰۰۸) نشان می‌دهد آموزش کارآفرینی افراد را مسئولیت‌پذیرتر و خطرپذیرتر کرده و نرخ بیکاری و شکست کسب‌وکارها را کاهش می‌دهد.
+                    </p>
+                    <div class="compare-grid">
+                        <div class="compare-box">
+                            <h4>۱. اهداف اقتصادی (اولویت اول)</h4>
+                            خلق ارزش نو توأم با ریسک، کسب سود مالی و تولید ثروت در جامعه.
+                        </div>
+                        <div class="compare-box alt">
+                            <h4>۲. اهداف اجتماعی (اولویت دوم)</h4>
+                            کسب جایگاه و منزلت اجتماعی، همدلی و حل چالش‌های محیطی (داوودی راد، ۱۳۹۲).
+                        </div>
+                    </div>
+                    <div class="quote-box">
+                        هدف نهایی این آموزش‌ها، تحریک استعدادها، القای مخاطره‌پذیری تحلیلی و تربیت بنیان‌گذاران خلاق کسب‌وکار است.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- اسلاید ۵: نقش آموزش عالی در ایران و جهان -->
+        <div class="slide">
+            <div class="editorial-card">
+                <div class="card-body">
+                    <div class="card-header-minimal">
+                        <div class="icon-circle"><i class="ri-global-line"></i></div>
+                        <div>
+                            <span style="font-size: 0.75rem; color: var(--gold); font-weight: 700;">بخش چهارم</span>
+                            <h2>آموزش عالی و کارآفرینی در ایران</h2>
+                        </div>
+                    </div>
+                    <p>
+                        دانشگاه از دو مسیر بر جامعه اثر می‌گذارد: <strong>رشد سرمایه انسانی (آموزش)</strong> و <strong>مراکز تحقیق و توسعه (R&D)</strong> در صنعت، کشاورزی و خدمات.
+                    </p>
+                    <ul class="custom-list">
+                        <li><strong>تجربه جهانی:</strong> تمرکز ویژه آمریکا، انگلستان، مالزی و به‌ویژه هندوستان بر آموزش دانشگاهی کارآفرینی.</li>
+                        <li><strong>طرح کاراد در ایران:</strong> اجرای طرح توسعه کارآفرینی در دانشگاه‌ها از برنامه سوم و چهارم توسعه و گسترش آن به ۱۰۶ شعبه دانشگاهی.</li>
+                        <li><strong>پارک‌های علم و فناوری:</strong> تأسیس ۲۲ پارک فناوری جهت ایجاد صنایع دانش‌بنیان، مشاوره و ارائه فضای کار ارزان‌قیمت به نوآوران.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- اسلاید ۶: مفهوم کارآفرینی اجتماعی -->
+        <div class="slide">
+            <div class="editorial-card">
+                <div class="card-body">
+                    <div class="card-header-minimal">
+                        <div class="icon-circle"><i class="ri-heart-pulse-line"></i></div>
+                        <div>
+                            <span style="font-size: 0.75rem; color: var(--gold); font-weight: 700;">بخش پنجم</span>
+                            <h2>مفهوم کارآفرینی اجتماعی</h2>
+                        </div>
+                    </div>
+                    <p>
+                        کارآفرینی اجتماعی پدیده‌ای نوین نیست، اما نام‌گذاری جدید آن مرزهای این بخش را مشخص می‌کند: ترکیب <strong>اصول کسب‌وکار سودآور با اهداف و خدمات اجتماعی</strong>.
+                    </p>
+                    <ul class="custom-list">
+                        <li><strong>قلمرو فعالیت:</strong> آموزش، محیط زیست، تجارت عادلانه، بهداشت، حقوق بشر و توانمندسازی اقشار کم‌برخوردار.</li>
+                        <li><strong>سازمان‌های مختلط:</strong> مانند پناهگاه‌هایی که افراد بی‌خانمان را آموزش داده و در کسب‌وکارهای واقعی استخدام می‌کنند.</li>
+                        <li><strong>الگوهای جهانی:</strong> موسسات «آشوکا»، «شواب»، «اسکول» و تجربه موفق <strong>محمد یونس</strong> (برنده جایزه صلح نوبل در بانکداری خرد).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- اسلاید ۷: دیدگاه نظریه‌پردازان -->
+        <div class="slide">
+            <div class="editorial-card">
+                <div class="card-body">
+                    <div class="card-header-minimal">
+                        <div class="icon-circle"><i class="ri-mind-map"></i></div>
+                        <div>
+                            <span style="font-size: 0.75rem; color: var(--gold); font-weight: 700;">بخش ششم</span>
+                            <h2>دیدگاه نظریه‌پردازان بزرگ</h2>
+                        </div>
+                    </div>
+                    <ul class="custom-list">
+                        <li><strong>ژین باتیست سی (قرن ۱۹):</strong> کارآفرین منابع اقتصادی را از سطوح کم‌بازده به سطوح پربازده منتقل می‌کند.</li>
+                        <li><strong>ژوزف شومپیتر:</strong> کارآفرین موتور محرکه اقتصاد است و با <strong>«تخریب خلاق»</strong> محصولات و مدل‌های منسوخ را بازتعریف می‌کند.</li>
+                        <li><strong>پیتر دراکر و کرزنر:</strong> کارآفرین همواره تغییر را جستجو کرده و با هوشیاری از تغییرات به عنوان یک «فرصت» بهره‌برداری می‌کند.</li>
+                        <li><strong>موس و دودلی (۲۰۰۲):</strong> کارآفرین اجتماعی روحیه بازرگانی را با روحیه جامعه‌گرایی برای ساخت «سرمایه اجتماعی» درهم می‌آمیزد.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- اسلاید ۸: رویکردها و انواع کارآفرینی اجتماعی -->
+        <div class="slide">
+            <div class="editorial-card">
+                <div class="card-body">
+                    <div class="card-header-minimal">
+                        <div class="icon-circle"><i class="ri-stack-line"></i></div>
+                        <div>
+                            <span style="font-size: 0.75rem; color: var(--gold); font-weight: 700;">بخش هفتم</span>
+                            <h2>رویکردها و انواع کارآفرینی اجتماعی</h2>
+                        </div>
+                    </div>
+                    <div class="quote-box">
+                        <strong>رویکرد کیستی (ویژگی‌های فردی):</strong> ماموریت‌گرایی، پشتکار، سازگاری، جسارت و مسئولیت‌پذیری (مسعودی و امین، ۱۳۸۹).
+                    </div>
+                    <p style="margin-bottom: 6px; font-weight: 700; color: var(--burgundy-dark);">دسته‌بندی سه‌گانه فولر (۲۰۰۹):</p>
+                    <ul class="custom-list">
+                        <li><strong>۱. یکپارچه:</strong> فعالیت اقتصادی که از پایه برای ایجاد دستاوردهای مثبت اجتماعی طراحی شده است.</li>
+                        <li><strong>۲. توزیع مجدد (تفسیر مجدد):</strong> استفاده نهاد غیرانتفاعی از فرصت‌ها برای کاهش هزینه یا تنوع‌بخشی به درآمدها.</li>
+                        <li><strong>۳. مکمل:</strong> تاسیس یک بخش اقتصادی رسمی توسط نهاد غیرانتفاعی تا سود آن، هزینه‌های بخش اجتماعی را تامین کند.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- اسلاید ۹: اشتراکات و تفاوت‌ها -->
+        <div class="slide">
+            <div class="editorial-card">
+                <div class="card-body">
+                    <div class="card-header-minimal">
+                        <div class="icon-circle"><i class="ri-scales-3-line"></i></div>
+                        <div>
+                            <span style="font-size: 0.75rem; color: var(--gold); font-weight: 700;">بخش هشتم</span>
+                            <h2>تفاوت کارآفرینی اجتماعی و اقتصادی</h2>
+                        </div>
+                    </div>
+                    <p>
+                        هر دو دارای رهبرانی متعهد و مبتکر هستند، اما در ۴ محور اساسی تفاوت دارند (میرک‌زاده و بهرامی، ۱۳۹۰):
+                    </p>
+                    <ul class="custom-list">
+                        <li><strong>ارزش‌ها و ماموریت:</strong> تعهد اصلی سازمان اجتماعی «تغییر محیط و ارزش‌آفرینی اجتماعی» است، نه صرفاً کامیابی مالی.</li>
+                        <li><strong>مرزهای سازمانی:</strong> رویدادهای بیرونی و نیازهای جامعه مستقیماً ماموریت سازمان اجتماعی را هدایت می‌کنند.</li>
+                        <li><strong>مالکیت و تخصیص منابع:</strong> تصمیم‌گیری و تامین منابع اغلب با مشارکت ذینفعان بیرونی صورت می‌گیرد.</li>
+                        <li><strong>سنجش موفقیت:</strong> ارزیابی بر اساس <strong>«تغییرات کیفی در جامعه»</strong> به جای شاخص‌های رشد کمی و سود ریالی.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- اسلاید ۱۰: علل ضعف در ایران (بخش اول) -->
+        <div class="slide">
+            <div class="editorial-card">
+                <div class="card-banner" style="height: 130px;">
+                    <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=800&q=80" alt="کلاس درس دانشگاهی">
+                    <div class="banner-overlay">
+                        <span class="slide-badge"><i class="ri-error-warning-line"></i> آسیب‌شناسی درون‌دانشگاهی</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h2>چالش‌های ترویج در ایران (سطح دانشگاه)</h2>
+                    <ul class="custom-list">
+                        <li><strong>مدیریت و کادر آموزشی:</strong> ساختار سلسله‌مراتبی آموزش عالی و کمبود اساتید حرفه‌ای که با محتوا و روش تدریس کارآفرینی اجتماعی آشنا باشند.</li>
+                        <li><strong>روش‌های سنتی و منسوخ:</strong> عدم تحول متون درسی متناسب با تغییرات بازار کار که عامل اصلی بیکاری فارغ‌التحصیلان است.</li>
+                        <li><strong>عدم نهادینه‌سازی در رشته‌ها:</strong> ارائه کارآفرینی صرفاً در قالب یک درس انتخابی مجزا، به جای تزریق روحیه نوآوری در تمام دروس تخصصی.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- اسلاید ۱۱: علل ضعف در ایران (بخش دوم) -->
+        <div class="slide">
+            <div class="editorial-card">
+                <div class="card-body">
+                    <div class="card-header-minimal">
+                        <div class="icon-circle"><i class="ri-building-2-line"></i></div>
+                        <div>
+                            <span style="font-size: 0.75rem; color: var(--gold); font-weight: 700;">بخش دهم</span>
+                            <h2>چالش‌های کلان، ساختاری و فرهنگی</h2>
+                        </div>
+                    </div>
+                    <ul class="custom-list">
+                        <li><strong>بوروکراسی و قوانین پیچیده:</strong> وجود نظام دیوان‌سالار، مراحل اداری بی‌پایان و دستگاه‌های نظارتی موازی که ریسک کسب‌وکار را بالا می‌برد.</li>
+                        <li><strong>فاصله عمیق صنعت و دانشگاه:</strong> تمرکز صرف دانشگاه بر «انتقال علم (آموزش)» و غفلت از «تحقیق و خدمات»؛ دانشگاه و بازار در دو دنیای متفاوت عمل می‌کنند.</li>
+                        <li><strong>موانع فرهنگی:</strong> غلبه روحیه کار فردی یا خانوادگی در فرهنگ ایرانی و ضعف در فرهنگ کار تیمی و سرمایه‌گذاری روی ایده‌های نوآورانه (احدی‌فر، ۱۳۹۱).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- اسلاید ۱۲: نتیجه‌گیری و منابع -->
+        <div class="slide">
+            <div class="editorial-card">
+                <div class="card-body">
+                    <div class="card-header-minimal">
+                        <div class="icon-circle" style="background: var(--gold-light); color: var(--gold);"><i class="ri-book-mark-line"></i></div>
+                        <div>
+                            <span style="font-size: 0.75rem; color: var(--gold); font-weight: 700;">بخش پایانی</span>
+                            <h2>نتیجه‌گیری و فهرست منابع</h2>
+                        </div>
+                    </div>
+                    <div class="quote-box">
+                        <strong>نتیجه‌گیری:</strong> تقویت کارآفرینی اجتماعی نیازمند برنامه‌ریزی آموزشی گسترده از خانواده و مدرسه تا دانشگاه است تا دانشجویان با تکیه بر ابتکار و تخصص، اشتغال مولد و ارزش‌آفرین خلق کنند.
+                    </div>
+                    <p style="font-weight: 700; font-size: 0.85rem; margin-bottom: 4px; color: var(--burgundy-dark);">منابع و مآخذ منتخب:</p>
+                    <ul class="custom-list" style="gap: 6px;">
+                        <li style="font-size: 0.78rem; padding: 7px 10px;">رحیمیان، ح.، عباسپور، ع.، و داوودی راد، د. (۱۳۹۵). تحلیل وضعیت ترویج کارآفرینی اجتماعی در نظام آموزش عالی ایران. پنجمین کنفرانس بین‌المللی پژوهش‌های نوین در مدیریت و اقتصاد.</li>
+                        <li style="font-size: 0.78rem; padding: 7px 10px;">احمدپور داریانی، محمود (۱۳۸۶). کارآفرینی؛ تعاریف، نظریات و الگوها. نشر پردیس.</li>
+                        <li style="font-size: 0.78rem; padding: 7px 10px;">ذبیحی، م. و مقدسی، ع. (۱۳۸۵). کارآفرینی از تئوری تا عمل. نشر نما.</li>
+                        <li style="font-size: 0.78rem; padding: 7px 10px;">میرک‌زاده، ع. و بهرامی، م. (۱۳۹۰). لزوم توجه به کارآفرینی اجتماعی به عنوان بستر پایداری. کار و جامعه، ش ۱۳۴.</li>
+                        <li style="font-size: 0.78rem; padding: 7px 10px;">Urbano, D. et al. (2008). Doctoral education in entrepreneurship. JSBED, 15(2).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- نوار کنترل پایین (Dock) -->
+    <div class="bottom-dock">
+        <button class="dock-btn" id="prevBtn" onclick="changeSlide(-1)">
+            <i class="ri-arrow-right-s-line"></i> قبلی
+        </button>
+        <div class="slide-counter" id="slideCounter">۱ از ۱۲</div>
+        <button class="dock-btn" id="nextBtn" onclick="changeSlide(1)">
+            بعدی <i class="ri-arrow-left-s-line"></i>
+        </button>
+    </div>
+
+</div>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentIndex = 0;
+
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const counterEl = document.getElementById('slideCounter');
+    const progressFill = document.getElementById('progressFill');
+
+    function toPersianNum(num) {
+        return num.toLocaleString('fa-IR');
+    }
+
+    function updateUI() {
+        slides.forEach((slide, idx) => {
+            slide.classList.toggle('active', idx === currentIndex);
+        });
+
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex === totalSlides - 1;
+
+        counterEl.textContent = `${toPersianNum(currentIndex + 1)} از ${toPersianNum(totalSlides)}`;
+        const progressPercent = ((currentIndex + 1) / totalSlides) * 100;
+        progressFill.style.width = `${progressPercent}%`;
+    }
+
+    function changeSlide(direction) {
+        const nextIndex = currentIndex + direction;
+        if (nextIndex >= 0 && nextIndex < totalSlides) {
+            currentIndex = nextIndex;
+            updateUI();
+        }
+    }
+
+    // پشتیبانی کامل از لمس و کشیدن انگشت روی صفحه گوشی (Swipe)
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const touchArea = document.getElementById('touchArea');
+
+    touchArea.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    touchArea.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        const diff = touchEndX - touchStartX;
+        // در حالت راست‌به‌چپ (RTL): کشیدن به راست یعنی اسلاید بعدی، کشیدن به چپ یعنی قبلی
+        if (Math.abs(diff) > 50) {
+            if (diff > 0) {
+                changeSlide(1);
+            } else {
+                changeSlide(-1);
+            }
+        }
+    }, { passive: true });
+
+    // پشتیبانی از کیبورد در کامپیوتر
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft' || e.key === ' ') changeSlide(1);
+        if (e.key === 'ArrowRight') changeSlide(-1);
+    });
+
+    updateUI();
+</script>
+
+</body>
+</html>
